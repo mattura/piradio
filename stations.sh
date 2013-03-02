@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
-#playlistdir=/var/lib/mpd/playlists
-playlistdir=/home/pi/.mpd/playlists
+playlistdir=/home/pi/mpd/playlists
 
 declare -A radios
 radios["BBC Radio 1"]="http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls"
