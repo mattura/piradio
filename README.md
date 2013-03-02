@@ -16,7 +16,7 @@ The following are optional:
 
 The idea of this project is to create a wireless internet radio which can be controlled exclusively by hand gestures (like a Theremin). The project is in the early stages of development but so far looks promising!
 
-Many thanks to the following sources for provideing libraries, tutorials and other information:
+Many thanks to the following sources where I have found libraries, tutorials and other information:
 * Jeremy Blythe - http://jeremyblythe.blogspot.co.uk
 * Guy Carpenter - https://github.com/guyc
 * 'Doceme' - https://github.com/doceme
