@@ -9,6 +9,7 @@ For this project, you need the following:
 * SSD1306 OLED display (eg from Adafruit)
 * MCP3008 Analogue to Digital converter chip
 * Sharp Infrared distance sensor (such as GP2Y0A02YK0F)
+* Wires, soldering iron, DMM, breadboard etc
 
 The following are optional:
 * USB sound card
