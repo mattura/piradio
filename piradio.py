@@ -127,7 +127,7 @@ device_on=True
 
 p=Popen(['mpc','clear'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
-p=Popen(['bash','/home/pi/.mpd/bbc.sh'],stdout=PIPE,stderr=PIPE)
+p=Popen(['bash','/home/pi/mpd/stations.sh'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
 
 
