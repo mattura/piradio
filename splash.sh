@@ -1,4 +1,4 @@
-sleep 5 #Wait for DHCP
+while ! ping -c1 www.google.com &>/dev/null; do sleep 1; done #Wait for DHCP
 ip=`ip addr show scope global | grep inet | cut -d' ' -f6 | cut -d/ -f1`
 echo -e '\e[36;1m'
 echo -e '       ,                       _     _ _                        '
