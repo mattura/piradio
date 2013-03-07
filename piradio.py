@@ -36,6 +36,21 @@ def get_dist():
     pc = int(cm/1.5)
     return pc
 
+def get_url(s):
+   suf=s.rsplit('.',1)[1]
+   cmd=['wget','-U','Mozilla/5.0 (X11; U; Linux i686; rv:1.9) Gecko Firefox/3.6','-q',str(s),'-O-$
+   if (suf == 'pls'):
+      p=Popen(cmd,stdout=PIPE)
+      (rvl,err)=p.communicate()
+      ind=rvl.find("File1=")+6
+      return rvl[ind:rvl.find("\n",ind)]
+   elif (suf == 'm3u'):
+      p=Popen(cmd,stdout=PIPE)
+      (rvl,err)=p.communicate()
+      return rvl.rstrip()
+   else:
+      return s
+
 def get_station():
    p=Popen(['mpc','current'],stdout=PIPE,stderr=PIPE)
    (t,err)=p.communicate()
@@ -44,23 +59,9 @@ def get_station():
       t=station_list[0]
    return t
 
-def get_stations():
-   p=Popen(['mpc','lsplaylists'],stdout=PIPE,stderr=PIPE)
-   (t,err)=p.communicate()
-   t=t.split('\n')#rstrip() #int(t.rstrip().strip('volume: %'))
-   t.pop() #last item is empty string
-   t.sort() #put in alphabetical order
-   return t
 def set_station(s):
-   p=Popen(['mpc','clear'],stdout=PIPE,stderr=PIPE)
+   p=Popen(['mpc','play',str(s)],stdout=PIPE,stderr=PIPE)
    (t,err)=p.communicate()
-   p=Popen(['mpc','load',str(s)],stdout=PIPE,stderr=PIPE)
-   (t,err)=p.communicate()
-#   print t,err
-   p=Popen(['mpc','play'],stdout=PIPE,stderr=PIPE)
-   (t,err)=p.communicate()
-#   print t,err
-#   t=t.rstrip() #int(t.rstrip().strip('volume: %'))
 
 def sl_append(scrollinglist, string): #Append 'string' to Scrolling List
    bmp=gaugette.ssd1306.SSD1306.Bitmap(scrollinglist.cols,scrollinglist.rows)
@@ -127,19 +128,29 @@ device_on=True
 
 p=Popen(['mpc','clear'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
-p=Popen(['bash','/home/pi/mpd/stations.sh'],stdout=PIPE,stderr=PIPE)
-(t,err)=p.communicate()
 
+sid=[
+'BBC Radio 1',
+'Absolute Radio',
+'Capital FM',
+'Russkoe Radio',
+'Jackie'
+]
+url=[
+'http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls',
+'http://mp3-vr-128.as34763.net/listen.pls',
+'http://media-ice.musicradio.com/CapitalMP3.m3u',
+'http://84.242.240.246:8000',
+'http://95.154.211.15:80'
+]
 
-#Create station list:
-station_list=get_stations()
-print station_list
-
-#station_list=["BBC Radio 1","BBC Radio 4","BBC 6 Music","Absolute Radio","XFM","Russkoe Radio"]
-
-list=["Ready","",""]+station_list+[""]  #3 pre screens - current, volume, settings; bounce end
+# Create station list:
+for k,v in zip(sid,url):
+   print get_url(v)
+   p=Popen(['mpc','add',get_url(v)],stdout=PIPE,stderr=PIPE)
+   (rvl,err)=p.communicate()
+list=["Ready","",""]+sid+[""]  #3 pre screens - current, volume, settings; bounce end
 scr = gaugette.ssd1306.SSD1306.ScrollingList(led,list,sfont)
-
 show_scr(scr,0)
 
 #scr.bitmaps[0].draw_text(0,0,"Welcome",sfont)
@@ -147,12 +158,7 @@ scr.bitmaps[1].draw_text(0,0,"Volume",sfont)
 scr.bitmaps[2].draw_text(0,0,"Settings",sfont)
 scr.ssd1306.display_block(scr.bitmaps[0],0,0,scr.cols)
 
-#sl_append(scr,"Apples")
-#sl_append(scr,"Bananas")
-#sl_append(scr,"Cherries")
-#for i in range(1,51):
-#  sl_append(scr,"Station: "+str(i))
-c=2
+c=2 #Wait a moment...
 while c<1:
    c=time.time()-relt
 
