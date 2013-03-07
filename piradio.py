@@ -131,17 +131,39 @@ p=Popen(['mpc','clear'],stdout=PIPE,stderr=PIPE)
 
 sid=[
 'BBC Radio 1',
+'BBC Radio 2',
+'BBC Radio 3',
+'BBC Radio 4',
+'BBC 6 Music',
+'BBC Radio 1 Xtra',
+'BBC Radio 4 Xtra',
 'Absolute Radio',
 'Capital FM',
-'Russkoe Radio',
-'Jackie'
+'Jackie',
+'XFM London',
+'Magic',
+'Heart',
+'Kiss 100',
+'LBC',
+'Russkoe Radio'
 ]
 url=[
 'http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls',
+'http://www.bbc.co.uk/radio/listen/live/r2_aaclca.pls',
+'http://www.bbc.co.uk/radio/listen/live/r3_aaclca.pls',
+'http://www.bbc.co.uk/radio/listen/live/r4_aaclca.pls',
+'http://www.bbc.co.uk/radio/listen/live/r6_aaclca.pls',
+'http://www.bbc.co.uk/radio/listen/live/r1x_aaclca.pls',
+'http://www.bbc.co.uk/radio/listen/live/r4x_aaclca.pls',
 'http://mp3-vr-128.as34763.net/listen.pls',
 'http://media-ice.musicradio.com/CapitalMP3.m3u',
-'http://84.242.240.246:8000',
-'http://95.154.211.15:80'
+'http://95.154.211.15:80',
+'http://media-ice.musicradio.com/XFMMP3.m3u',
+'http://tx.whatson.com/icecast.php?i=magic1054.mp3.m3u',
+'http://media-ice.musicradio.com/HeartLondonMP3.m3u',
+'http://tx.whatson.com/icecast.php?i=kiss100.mp3.m3u',
+'http://media-ice.musicradio.com/LBC973.m3u',
+'http://84.242.240.246:8000'
 ]
 
 # Create station list:
@@ -186,7 +208,7 @@ while device_on:
          scr.align()
          current_station=scr.position/32
          draw_cur(scr)
-         set_station(current_station-3) #scr.list[current_station])
+         set_station(current_station-2) #scr.list[current_station])
          state=1
          show_scr(scr,0)
          pass
