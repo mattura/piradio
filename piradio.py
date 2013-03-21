@@ -11,9 +11,7 @@ RESET_PIN = 0 #15
 DC_PIN    = 1 #16
 ADC_CHANNEL = 0
 
-DMIN=10
-DMAX=110        #max distance (=no hand)
-DC_SECS=0.9     #number of seconds within which 'double click' registers
+DC_SECS=1.1     #number of seconds within which 'double click' registers
 
 inp = spidev.SpiDev()
 inp.open(0,1)   #Device chip select 1 - connect CS pin to GPIO7 (CE1) on Raspberry Pi
@@ -84,11 +82,10 @@ def show_scr(scrollinglist,index):
    scrollinglist.position=index*32
 
 def draw_vol(scrollinglist,v): #pixel draw volume slider
-   scrollinglist.bitmaps[1].clear_block(0,0,128,16)
-   scrollinglist.bitmaps[1].draw_text(0,0,"Volume: "+str(v),sfont)
+   scrollinglist.bitmaps[1].clear_block(64,0,80,16)
+   scrollinglist.bitmaps[1].draw_text(64,0,str(v),sfont)
    draw_vol_line(scrollinglist.bitmaps[1],v)
    show_scr(scrollinglist,1)
-   pass
 
 def draw_vline(scr,x,y0,y1):
    bm= 1 << (y0%8)
@@ -123,10 +120,10 @@ sfont=verdana_15
 led.draw_text3(0,0,"Loading...",sfont)
 led.display()
 current_station=3 #get from mpc or 3
-state=1
-device_on=True
 
 p=Popen(['mpc','clear'],stdout=PIPE,stderr=PIPE)
+(t,err)=p.communicate()
+p=Popen(['mpc','volume','75'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
 
 sid=[
@@ -171,75 +168,88 @@ for k,v in zip(sid,url):
    print get_url(v)
    p=Popen(['mpc','add',get_url(v)],stdout=PIPE,stderr=PIPE)
    (rvl,err)=p.communicate()
+
 list=["Ready","",""]+sid+[""]  #3 pre screens - current, volume, settings; bounce end
 scr = gaugette.ssd1306.SSD1306.ScrollingList(led,list,sfont)
 show_scr(scr,0)
 
 #scr.bitmaps[0].draw_text(0,0,"Welcome",sfont)
-scr.bitmaps[1].draw_text(0,0,"Volume",sfont)
+scr.bitmaps[1].draw_text(0,0,"Volume:",sfont)
 scr.bitmaps[2].draw_text(0,0,"Settings",sfont)
 scr.ssd1306.display_block(scr.bitmaps[0],0,0,scr.cols)
 
-c=2 #Wait a moment...
+#sl_append(scr,"Cherries")
+#for i in range(1,51):
+#  sl_append(scr,"Station: "+str(i))
+c=2
 while c<1:
    c=time.time()-relt
 
 scr.bitmaps[0].clear_block(0,0,128,32)
+d=get_dist()
+while (d<30): #dont allow too small range
+   d=get_dist()
+   scr.bitmaps[0].clear_block(0,15,20,16)
+   scr.bitmaps[0].draw_text(0,0,"Sensor blocked!",sfont)
+   scr.bitmaps[0].draw_text(0,15,str(d),sfont)
+   show_scr(scr,0)
+   time.sleep(0.3)
+DMAX=d*0.9 #10% error margin for max distance
+if (DMAX>100):
+   DMAX=100
+DMIN=10
+
+scr.bitmaps[0].clear_block(0,0,128,32)
 scr.bitmaps[0].draw_text(0,0,"Welcome",sfont)
 show_scr(scr,0)
-d=0
 od=0
 inid=0
+vc=0 #volume counter for set vol
 vol=get_vol()
+ovol=vol
 offt=time.time()
+state=1
+device_on=True
 
 while device_on:
    d=get_dist()
-#   time.sleep(0.05)
    if (d>=DMAX): #no hand, or hand taken away:
-      d=DMAX
       if (state==2): #hand taken away
-         state=4
-         relt=time.time() #start the clock
-         pass
-      if (state==3): #set station
-         p=Popen(['mpc','status'],stdout=PIPE,stderr=PIPE)
-         (t,err)=p.communicate()
+#         print "State 2->3 H rem",d
+         state=3
+         vol=ovol
+         draw_vol(scr,vol)
+         set_vol(vol)
+      if (state==3): #Hand away after vol -> timeout
+         if (time.time()-timer>DC_SECS):
+#            print "State 3->1 timeout"
+            state=1
+            show_scr(scr,0)
+      if (state==4): #set station
+#         print "State 3->1 H rem",d
          scr.align()
          current_station=scr.position/32
          draw_cur(scr)
          set_station(current_station-2) #scr.list[current_station])
          state=1
          show_scr(scr,0)
-         pass
-      if (state==4): #4 second hold state
-         if (time.time()-relt>3): #put message back
-            state=1
-            show_scr(scr,0)
       else:
          pass #normal, no hand
 
    else: #hand
-      if (state==1 or state==4): #hand from first state/hold state
-         timt=time.time()-relt
-         if (timt>DC_SECS):# or abs(od-d)>20): #too long for double click or didnt significantly change vol
-            show_scr(scr,1) #display volume screen
-            state=2
-            iniv=get_vol()
-            d=get_dist() #read again in case of bad 1st value
-            inid=d
-            stpd=(d-DMIN)/iniv
-            stpu=(DMAX-d)/iniv
-            od=d
-            pass
-         else: #double click
-            state=3 #change channel
-            d=get_dist() #read again in case of bad 1st value
-            inid=d
-            show_scr(scr,current_station)
-            pass
+      if (state==1): #hand from first state
+#         print "State 1->2 H",d
+         state=2
+         timer=time.time()
+         show_scr(scr,1) #display volume screen
+         iniv=get_vol()
+         time.sleep(0.05)
+         d=get_dist() #read again in case of bad 1st value
+         inid=d
+         stpd=(d-DMIN)/iniv
+         stpu=(DMAX-d)/iniv
+         od=d
       if (state==2): #adjust volume
-#         time.sleep(0.02) #smoother/CPU?
          if (d<inid): #vol down
             vol=iniv-(inid-d) #d*stpd/inid
          else: #vol up
@@ -253,31 +263,38 @@ while device_on:
             offt=time.time()
          if (vol>100):
             vol=100
-         draw_vol(scr,vol)
-         set_vol(vol)
-         pass #get new
-      if (state==3): #adjust scroll speed for station
+#         time.sleep(0.05) #smoother/CPU?
+         vc=vc+1
+         if (vc==5): #only when x increments, change volume
+            draw_vol(scr,vol)
+            vc=0
+            set_vol(ovol)
+            ovol=vol
+      if (state==3):
+#         print "State 3->4 H",d
+         state=4 #change channel
+         time.sleep(0.05)
+         d=get_dist() #read again in case of bad 1st value
+         inid=d
+         show_scr(scr,current_station)
+      if (state==4): #adjust scroll speed for station
          scrs=int((d-inid)/5)
          smax=len(scr.list)-2
          time.sleep(0.02) #float(scrs)/100)
          ind=scr.position/32
-#         print d,scr.position,ind,smax
+#         print d,inid,scr.position,ind,smax,scrs
          if (d<inid): #scroll down
             if (ind>2):
                scr.scroll(scrs)
-         else: #scroll up
+         if (d>inid): #scroll up
             if (scr.position+scrs<=smax*32):
                scr.scroll(scrs)
             elif (scr.position<smax*32):
                scr.scroll(1)
 
 
-
 show_scr(scr,len(scr.list)-1)
-
 p=Popen(['mpc','stop'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
-
 time.sleep(0.1)
-
 exit()
