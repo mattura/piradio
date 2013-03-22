@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
+<<<<<<< HEAD
 dir=/home/pi/mpd
+=======
+playlistdir=/home/pi/mpd/playlists
+>>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 
 declare -A radios
 #radios["BBC Radio 1"]="http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls"

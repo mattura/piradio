@@ -27,7 +27,6 @@ def get_dist():
     for i in range (0,10):
         r.append(get_val())
     a = sum(r)/10.0
-#    a = get_val()
     v = (a/1023.0)*3.3
     d = 16.2537 * v**4 - 129.893 * v**3 + 382.268 * v**2 - 512.611 * v + 306.439
     cm = int(round(d))
@@ -37,11 +36,7 @@ def get_dist():
 
 def get_url(s):
    suf=s.rsplit('.',1)[1]
-<<<<<<< HEAD
    cmd=['wget','-U',"Mozilla/5.0 (X11; U; Linux i686; rv:1.9) Gecko Firefox/3.6",'-q',str(s),'-O-']
-=======
-   cmd=['wget','-U','Mozilla/5.0 (X11; U; Linux i686; rv:1.9) Gecko Firefox/3.6','-q',str(s),'-O-$
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
    if (suf == 'pls'):
       p=Popen(cmd,stdout=PIPE)
       (rvl,err)=p.communicate()
@@ -87,8 +82,8 @@ def show_scr(scrollinglist,index):
    scrollinglist.position=index*32
 
 def draw_vol(scrollinglist,v): #pixel draw volume slider
-   scrollinglist.bitmaps[1].clear_block(64,0,80,16)
-   scrollinglist.bitmaps[1].draw_text(64,0,str(v),sfont)
+   scrollinglist.bitmaps[1].clear_block(0,0,128,16)
+   scrollinglist.bitmaps[1].draw_text(0,0,"Volume: "+str(v),sfont)
    draw_vol_line(scrollinglist.bitmaps[1],v)
    show_scr(scrollinglist,1)
 
@@ -133,67 +128,37 @@ p=Popen(['mpc','volume','75'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
 
 sid=[
-'BBC Radio 1',
-<<<<<<< HEAD
+#'BBC Radio 1',
 #'BBC Radio 2',
 #'BBC Radio 3',
 #'BBC Radio 4',
 #'BBC 6 Music',
 #'BBC Radio 1 Xtra',
 #'BBC Radio 4 Xtra',
-'Absolute Radio',
+#'Absolute Radio',
 #'Capital FM',
-'Jackie',
-'XFM London',
+#'Jackie',
+#'XFM London',
 #'Magic',
 #'Heart',
-=======
-'BBC Radio 2',
-'BBC Radio 3',
-'BBC Radio 4',
-'BBC 6 Music',
-'BBC Radio 1 Xtra',
-'BBC Radio 4 Xtra',
-'Absolute Radio',
-'Capital FM',
-'Jackie',
-'XFM London',
-'Magic',
-'Heart',
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 'Kiss 100',
 'LBC',
 'Russkoe Radio'
 ]
 url=[
-'http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls',
-<<<<<<< HEAD
+#'http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r2_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r3_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r4_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r6_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r1x_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r4x_aaclca.pls',
-'http://mp3-vr-128.as34763.net/listen.pls',
+#'http://mp3-vr-128.as34763.net/listen.pls',
 #'http://media-ice.musicradio.com/CapitalMP3.m3u',
-'http://95.154.211.15:80',
-'http://media-ice.musicradio.com/XFMMP3.m3u',
+#'http://95.154.211.15:80',
+#'http://media-ice.musicradio.com/XFMMP3.m3u',
 #'http://tx.whatson.com/icecast.php?i=magic1054.mp3.m3u',
 #'http://media-ice.musicradio.com/HeartLondonMP3.m3u',
-=======
-'http://www.bbc.co.uk/radio/listen/live/r2_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r3_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r4_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r6_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r1x_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r4x_aaclca.pls',
-'http://mp3-vr-128.as34763.net/listen.pls',
-'http://media-ice.musicradio.com/CapitalMP3.m3u',
-'http://95.154.211.15:80',
-'http://media-ice.musicradio.com/XFMMP3.m3u',
-'http://tx.whatson.com/icecast.php?i=magic1054.mp3.m3u',
-'http://media-ice.musicradio.com/HeartLondonMP3.m3u',
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 'http://tx.whatson.com/icecast.php?i=kiss100.mp3.m3u',
 'http://media-ice.musicradio.com/LBC973.m3u',
 'http://84.242.240.246:8000'
@@ -210,7 +175,7 @@ scr = gaugette.ssd1306.SSD1306.ScrollingList(led,list,sfont)
 show_scr(scr,0)
 
 #scr.bitmaps[0].draw_text(0,0,"Welcome",sfont)
-scr.bitmaps[1].draw_text(0,0,"Volume:",sfont)
+scr.bitmaps[1].draw_text(0,0,"Volume",sfont)
 scr.bitmaps[2].draw_text(0,0,"Settings",sfont)
 scr.ssd1306.display_block(scr.bitmaps[0],0,0,scr.cols)
 
@@ -246,31 +211,28 @@ ovol=vol
 offt=time.time()
 state=1
 device_on=True
-<<<<<<< HEAD
 
 print DMAX,d
-=======
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 
 while device_on:
    d=get_dist()
    if (d>=DMAX): #no hand, or hand taken away:
       if (state==2): #hand taken away
-#         print "State 2->3 H rem",d
+         print "State 2->3 H rem",d
          state=3
          vol=ovol
          draw_vol(scr,vol)
          set_vol(vol)
       if (state==3): #Hand away after vol -> timeout
          if (time.time()-timer>DC_SECS):
-#            print "State 3->1 timeout"
+            print "State 3->1 timeout"
             state=1
-            show_scr(scr,0)
       if (state==4): #set station
-#         print "State 3->1 H rem",d
+         print "State 3->1 H rem",d
          scr.align()
          current_station=scr.position/32
          draw_cur(scr)
+         print current_station-2
          set_station(current_station-2) #scr.list[current_station])
          state=1
          show_scr(scr,0)
@@ -279,7 +241,7 @@ while device_on:
 
    else: #hand
       if (state==1): #hand from first state
-#         print "State 1->2 H",d
+         print "State 1->2 H",d
          state=2
          timer=time.time()
          show_scr(scr,1) #display volume screen
@@ -312,7 +274,7 @@ while device_on:
             set_vol(ovol)
             ovol=vol
       if (state==3):
-#         print "State 3->4 H",d
+         print "State 3->4 H",d
          state=4 #change channel
          time.sleep(0.05)
          d=get_dist() #read again in case of bad 1st value
@@ -323,7 +285,7 @@ while device_on:
          smax=len(scr.list)-2
          time.sleep(0.02) #float(scrs)/100)
          ind=scr.position/32
-#         print d,inid,scr.position,ind,smax,scrs
+         print d,inid,scr.position,ind,smax,scrs
          if (d<inid): #scroll down
             if (ind>2):
                scr.scroll(scrs)
@@ -333,10 +295,6 @@ while device_on:
             elif (scr.position<smax*32):
                scr.scroll(1)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 show_scr(scr,len(scr.list)-1)
 p=Popen(['mpc','stop'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
