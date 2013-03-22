@@ -37,11 +37,7 @@ def get_dist():
 
 def get_url(s):
    suf=s.rsplit('.',1)[1]
-<<<<<<< HEAD
    cmd=['wget','-U',"Mozilla/5.0 (X11; U; Linux i686; rv:1.9) Gecko Firefox/3.6",'-q',str(s),'-O-']
-=======
-   cmd=['wget','-U','Mozilla/5.0 (X11; U; Linux i686; rv:1.9) Gecko Firefox/3.6','-q',str(s),'-O-$
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
    if (suf == 'pls'):
       p=Popen(cmd,stdout=PIPE)
       (rvl,err)=p.communicate()
@@ -134,7 +130,6 @@ p=Popen(['mpc','volume','75'],stdout=PIPE,stderr=PIPE)
 
 sid=[
 'BBC Radio 1',
-<<<<<<< HEAD
 #'BBC Radio 2',
 #'BBC Radio 3',
 #'BBC Radio 4',
@@ -147,27 +142,12 @@ sid=[
 'XFM London',
 #'Magic',
 #'Heart',
-=======
-'BBC Radio 2',
-'BBC Radio 3',
-'BBC Radio 4',
-'BBC 6 Music',
-'BBC Radio 1 Xtra',
-'BBC Radio 4 Xtra',
-'Absolute Radio',
-'Capital FM',
-'Jackie',
-'XFM London',
-'Magic',
-'Heart',
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 'Kiss 100',
 'LBC',
 'Russkoe Radio'
 ]
 url=[
 'http://www.bbc.co.uk/radio/listen/live/r1_aaclca.pls',
-<<<<<<< HEAD
 #'http://www.bbc.co.uk/radio/listen/live/r2_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r3_aaclca.pls',
 #'http://www.bbc.co.uk/radio/listen/live/r4_aaclca.pls',
@@ -180,20 +160,6 @@ url=[
 'http://media-ice.musicradio.com/XFMMP3.m3u',
 #'http://tx.whatson.com/icecast.php?i=magic1054.mp3.m3u',
 #'http://media-ice.musicradio.com/HeartLondonMP3.m3u',
-=======
-'http://www.bbc.co.uk/radio/listen/live/r2_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r3_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r4_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r6_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r1x_aaclca.pls',
-'http://www.bbc.co.uk/radio/listen/live/r4x_aaclca.pls',
-'http://mp3-vr-128.as34763.net/listen.pls',
-'http://media-ice.musicradio.com/CapitalMP3.m3u',
-'http://95.154.211.15:80',
-'http://media-ice.musicradio.com/XFMMP3.m3u',
-'http://tx.whatson.com/icecast.php?i=magic1054.mp3.m3u',
-'http://media-ice.musicradio.com/HeartLondonMP3.m3u',
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 'http://tx.whatson.com/icecast.php?i=kiss100.mp3.m3u',
 'http://media-ice.musicradio.com/LBC973.m3u',
 'http://84.242.240.246:8000'
@@ -246,11 +212,6 @@ ovol=vol
 offt=time.time()
 state=1
 device_on=True
-<<<<<<< HEAD
-
-print DMAX,d
-=======
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 
 while device_on:
    d=get_dist()
@@ -333,10 +294,6 @@ while device_on:
             elif (scr.position<smax*32):
                scr.scroll(1)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 903e7a4b5d9a9707dca0e899b4057c3b4950bb25
 show_scr(scr,len(scr.list)-1)
 p=Popen(['mpc','stop'],stdout=PIPE,stderr=PIPE)
 (t,err)=p.communicate()
