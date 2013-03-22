@@ -201,6 +201,8 @@ if (DMAX>100):
    DMAX=100
 DMIN=10
 
+print DMAX
+
 scr.bitmaps[0].clear_block(0,0,128,32)
 scr.bitmaps[0].draw_text(0,0,"Welcome",sfont)
 show_scr(scr,0)
@@ -240,7 +242,7 @@ while device_on:
 
    else: #hand
       if (state==1): #hand from first state
-#         print "State 1->2 H",d
+         print "State 1->2 H",d
          state=2
          timer=time.time()
          show_scr(scr,1) #display volume screen
