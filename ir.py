@@ -23,11 +23,10 @@ class IR:
 		r = []
 		for i in range (0,reads):
 			r.append(self.get_val())
-		a = sum(r)/10.0
+		a = sum(r)/float(reads)
 		v = (a/1023.0)*3.3
-		d = 16.2537 * v**4 - 129.893 * v**3 + 382.268 * v**2 - 512.611 * v + 306.439
+		# Approximation to y = 27.4687 * x ^ -1.20674
+		d = 27.469 * pow(v, -1.2067)
 		cm = int(round(d))
-		val = '%d cm' % cm
-		pc = int(cm/1.5)
-		return pc
+		return cm
 
