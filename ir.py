@@ -22,7 +22,7 @@ class IR:
 	def get_dist(self, reads=10):  #Get average of several values for accuracy
 		r = []
 		for i in range (0,reads):
-			r.append(get_val())
+			r.append(self.get_val())
 		a = sum(r)/10.0
 		v = (a/1023.0)*3.3
 		d = 16.2537 * v**4 - 129.893 * v**3 + 382.268 * v**2 - 512.611 * v + 306.439
