@@ -8,14 +8,15 @@ import spidev
 
 class IR:
 
-	ADC_CHANNEL = 0
-
-	def __init__(self, bus=0, device_cs=1):
+	def __init__(self, bus=0, device=1, adc_channel=0):
 		self.inp = spidev.SpiDev()
-		self.inp.open(bus, device_cs)
+		self.bus=bus
+		self.device=device
+		self.adc_channel=adc_channel
+		self.inp.open(bus, device)
 
 	def get_val(self):   #read analogue value from ADC (MCP3008)
-		r = self.inp.xfer2([1,(8+self.ADC_CHANNEL)<<4,0])
+		r = self.inp.xfer2([1,(8+self.adc_channel)<<4,0])
 		v = ((r[1]&3) << 8) + r[2]
 		return v
 
@@ -25,7 +26,8 @@ class IR:
 			r.append(self.get_val())
 		a = sum(r)/float(reads)
 		v = (a/1023.0)*3.3
-		# Approximation to y = 27.4687 * x ^ -1.20674
+		# Distance/voltage relation is approximated to y = 27.4687 * x ^ -1.20674
+		# This gives a minimum accuracy of +/- 0.5cm
 		d = 27.469 * pow(v, -1.2067)
 		cm = int(round(d))
 		return cm
